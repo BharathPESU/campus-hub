@@ -1,0 +1,6 @@
+{
+  "//": "FILE: frontend/package.json. READ FIRST: docs/pseudo_code.md section 7; docs/plan.md section 11. TODO add react, vite, typescript, react-router-dom, oidc-client-ts, eslint, prettier; pin versions.",
+  "name": "campus-hub-frontend",
+  "private": true,
+  "scripts": {"dev": "vite", "build": "vite build"}
+}

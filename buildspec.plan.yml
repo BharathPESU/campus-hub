@@ -1,0 +1,4 @@
+# FILE: buildspec.plan.yml
+# PURPOSE: CodeBuild: tests, build, terraform plan
+# READ FIRST: docs/pseudo_code.md section 9.1 ; docs/plan.md section 13
+# STATUS: TODO starter stub. Follow the docs exactly; do not invent names.

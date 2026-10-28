@@ -1,0 +1,4 @@
+# FILE: backend/requirements.txt
+# PURPOSE: runtime deps: aws-lambda-powertools[tracer], pydantic, python-ulid (pin exact; no boto3)
+# READ FIRST: docs/pseudo_code.md section 2.4, R2/R3 ; docs/plan.md section 11
+# STATUS: TODO starter stub. Follow the docs exactly; do not invent names.

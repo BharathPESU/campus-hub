@@ -1,0 +1,4 @@
+{
+  // FILE: frontend/tsconfig.json. READ FIRST: docs/plan.md section 11 (strict mode)
+  "compilerOptions": {"strict": true}
+}

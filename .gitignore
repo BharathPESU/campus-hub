@@ -1,0 +1,11 @@
+*.tfstate*
+.terraform/
+*.tfplan
+tfplan
+build/
+node_modules/
+frontend/dist/
+frontend/public/config.json
+__pycache__/
+.env*
+.venv/
