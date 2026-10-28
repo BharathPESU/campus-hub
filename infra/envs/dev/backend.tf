@@ -1,4 +1,9 @@
-# FILE: infra/envs/dev/backend.tf
-# PURPOSE: state in S3, use_lockfile
-# READ FIRST: docs/pseudo_code.md section 6.4 ; docs/plan.md section 7
-# STATUS: TODO starter stub. Follow the docs exactly; do not invent names.
+terraform {
+  backend "s3" {
+    bucket       = "campus-hub-tfstate-091319139186"
+    key          = "envs/dev/terraform.tfstate"
+    region       = "ap-south-2"
+    encrypt      = true
+    use_lockfile = true
+  }
+}

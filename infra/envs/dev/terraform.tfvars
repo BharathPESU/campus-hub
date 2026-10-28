@@ -1,4 +1,9 @@
-# FILE: infra/envs/dev/terraform.tfvars
-# PURPOSE: non-secret values only
-# READ FIRST: docs/pseudo_code.md section 6.4 ; docs/plan.md section 7
-# STATUS: TODO starter stub. Follow the docs exactly; do not invent names.
+env                         = "dev"
+region                      = "ap-south-2"
+sender_email                = "234bharathcd@gmail.com"
+admin_email                 = "234bharathcd@gmail.com"
+email_mode                  = "log"
+protect_data                = false
+force_destroy               = true
+budget_limit_usd            = 1
+lambda_reserved_concurrency = null

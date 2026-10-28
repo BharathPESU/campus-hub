@@ -4,7 +4,7 @@ Follow the phases **in order**. Do not start a phase until the previous one's **
 
 - Design: `docs/plan.md`. Exact logic: `docs/pseudo_code.md` (its section 1 overrides plan.md).
 - Method: you write code locally, **Terraform creates everything in AWS**, and you **verify in the AWS Console** (Phase 15).
-- Region used throughout: `ap-south-1` (Mumbai). Replace `<ACCOUNT_ID>` and `<YOUR_EMAIL>` where shown.
+- Region used throughout: `ap-south-2` (Hyderabad). Replace `<ACCOUNT_ID>` and `<YOUR_EMAIL>` where shown.
 - Commands assume Linux or macOS (or WSL on Windows).
 
 ---
@@ -18,7 +18,7 @@ Follow the phases **in order**. Do not start a phase until the previous one's **
    - Open *IAM Identity Center*, then *Enable*.
    - Create a user, then *Permission sets*, then create or use `AdministratorAccess`, then assign it to your account.
    - Note the **AWS access portal URL**.
-5. **Region:** switch the console region to **Asia Pacific (Mumbai) ap-south-1**. In the console search, confirm each service opens there: Cognito, Lambda, API Gateway, DynamoDB, SNS, SQS, SES, Step Functions, EventBridge Scheduler, CodePipeline, CodeBuild, X-Ray.
+5. **Region:** switch the console region to **Asia Pacific (Hyderabad) ap-south-2**. In the console search, confirm each service opens there: Cognito, Lambda, API Gateway, DynamoDB, SNS, SQS, SES, Step Functions, EventBridge Scheduler, CodePipeline, CodeBuild, X-Ray.
 6. **Quota check:** *Service Quotas*, then *AWS Lambda*, then *Concurrent executions*. Write the value down. If it is **10**, leave `lambda_reserved_concurrency = null`.
 7. **Account plan:** on the Billing home page, note whether you are on the **Free plan (credits)** or a paid plan. If Terraform later says a service is "not available on the free plan", this is why.
 
@@ -41,9 +41,9 @@ Follow the phases **in order**. Do not start a phase until the previous one's **
    ```
 2. Log in from the CLI:
    ```bash
-   aws configure sso            # use the portal URL, region ap-south-1, profile name: campus
+   aws configure sso            # use the portal URL, region ap-south-2, profile name: campus
    aws sso login --profile campus
-   export AWS_PROFILE=campus AWS_REGION=ap-south-1
+   export AWS_PROFILE=campus AWS_REGION=ap-south-2
    aws sts get-caller-identity
    export ACCOUNT_ID=$(aws sts get-caller-identity --query Account --output text)
    ```
@@ -73,11 +73,11 @@ Follow the phases **in order**. Do not start a phase until the previous one's **
    terraform apply -var="account_id=$ACCOUNT_ID"
    cd ../..
    ```
-3. Edit `infra/envs/dev/backend.tf`: bucket `campus-hub-tfstate-<ACCOUNT_ID>`, key `envs/dev/terraform.tfstate`, region `ap-south-1`, `encrypt = true`, `use_lockfile = true`.
+3. Edit `infra/envs/dev/backend.tf`: bucket `campus-hub-tfstate-<ACCOUNT_ID>`, key `envs/dev/terraform.tfstate`, region `ap-south-2`, `encrypt = true`, `use_lockfile = true`.
 4. Fill `versions.tf` (`>= 1.10.0`, aws `~> 6.0`), `providers.tf` (`default_tags`), and `variables.tf`. Set `terraform.tfvars`:
    ```hcl
    env                = "dev"
-   region             = "ap-south-1"
+   region             = "ap-south-2"
    sender_email       = "<YOUR_EMAIL>"
    admin_email        = "<YOUR_EMAIL>"
    email_mode         = "log"
@@ -231,7 +231,7 @@ If Terraform reports a dependency cycle between `functions` and `scheduling`, fo
 ## Phase 9: Real emails with SES
 
 1. Set `email_mode = "ses"` in `terraform.tfvars` and apply.
-2. **Console:** *Amazon SES* in `ap-south-1`, then *Identities*. Open your sender email's verification message and click the link. The status must become *Verified*.
+2. **Console:** *Amazon SES* in `ap-south-2`, then *Identities*. Open your sender email's verification message and click the link. The status must become *Verified*.
 3. SES starts in **sandbox**: every recipient must also be a verified identity. Add and verify each test recipient (your teammates) under *Identities*.
 4. Register a verified recipient for an event. A confirmation email should arrive within a minute.
 5. If nothing arrives: check the `email_sender` log group in CloudWatch, then the outbox DLQ message count in SQS.
@@ -313,7 +313,7 @@ If Terraform reports a dependency cycle between `functions` and `scheduling`, fo
 
 ## Phase 15: Verify everything in the AWS Console
 
-Open each page in `ap-south-1` (CloudFront and IAM are global).
+Open each page in `ap-south-2` (CloudFront and IAM are global).
 
 | Service | Console location | You should see |
 |---|---|---|

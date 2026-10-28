@@ -1,4 +1,9 @@
-# FILE: infra/bootstrap/versions.tf
-# PURPOSE: bootstrap stack (versions)
-# READ FIRST: docs/pseudo_code.md section 11 T02 ; docs/plan.md section 7, 13
-# STATUS: TODO starter stub. Follow the docs exactly; do not invent names.
+terraform {
+  required_version = ">= 1.10.0"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 6.0"
+    }
+  }
+}
