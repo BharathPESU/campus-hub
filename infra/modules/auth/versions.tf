@@ -1,4 +1,9 @@
-# FILE: infra/modules/auth/versions.tf
-# PURPOSE: module auth (versions)
-# READ FIRST: docs/pseudo_code.md section 6.2 auth ; docs/plan.md section 10 Cognito
-# STATUS: TODO starter stub. Follow the docs exactly; do not invent names.
+terraform {
+  required_version = ">= 1.10.0"
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 6.0"
+    }
+  }
+}
