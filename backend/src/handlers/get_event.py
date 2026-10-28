@@ -1,9 +1,18 @@
-# FILE: backend/src/handlers/get_event.py
-# PURPOSE: Lambda handler get_event
-# READ FIRST: docs/pseudo_code.md section 4.3; 6.3 IAM row ; docs/plan.md section 9, 10
-# STATUS: TODO starter stub. Follow the docs exactly; do not invent names.
+"""Public handler to retrieve a single event by ID."""
 
-# TODO implement
+from typing import Any
 
-def handler(event, context):
-    raise NotImplementedError
+from common.db import get_event, to_public_event
+from common.errors import NotFound
+from common.http import api_handler, json_response, path_id
+
+
+@api_handler
+def handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
+    """Retrieve event by ID from DynamoDB table."""
+    event_id = path_id(event)
+    item = get_event(event_id)
+    if item is None:
+        raise NotFound("EVENT_NOT_FOUND", "Event not found.")
+
+    return json_response(200, to_public_event(item))

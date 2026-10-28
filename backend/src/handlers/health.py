@@ -1,9 +1,12 @@
-# FILE: backend/src/handlers/health.py
-# PURPOSE: Lambda handler health
-# READ FIRST: docs/pseudo_code.md section 4.1; 6.3 IAM row ; docs/plan.md section 9, 10
-# STATUS: TODO starter stub. Follow the docs exactly; do not invent names.
+"""Public health check handler."""
 
-# TODO implement
+from typing import Any
 
-def handler(event, context):
-    raise NotImplementedError
+from common.http import api_handler, json_response
+from common.timeutil import now_utc, to_iso
+
+
+@api_handler
+def handler(event: dict[str, Any], context: Any) -> dict[str, Any]:
+    """Return health status and current UTC time."""
+    return json_response(200, {"status": "ok", "time": to_iso(now_utc())})

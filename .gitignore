@@ -9,3 +9,5 @@ frontend/public/config.json
 __pycache__/
 .env*
 .venv/
+.pytest_cache/
+.ruff_cache/

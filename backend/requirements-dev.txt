@@ -1,4 +1,6 @@
-# FILE: backend/requirements-dev.txt
-# PURPOSE: pytest, moto, ruff, mypy, boto3
-# READ FIRST: docs/pseudo_code.md section 2.4 ; docs/plan.md section 11
-# STATUS: TODO starter stub. Follow the docs exactly; do not invent names.
+-r requirements.txt
+boto3==1.43.120
+moto[dynamodb,sns,sqs]==5.2.5
+mypy==2.4.0
+pytest==9.2.0
+ruff==0.17.3
