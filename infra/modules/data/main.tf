@@ -1,11 +1,11 @@
 resource "aws_dynamodb_table" "this" {
-  name             = var.name
-  billing_mode     = "PROVISIONED"
-  read_capacity    = 5
-  write_capacity   = 5
-  hash_key         = "PK"
-  range_key        = "SK"
-  stream_enabled   = false
+  name           = var.name
+  billing_mode   = "PROVISIONED"
+  read_capacity  = 5
+  write_capacity = 5
+  hash_key       = "PK"
+  range_key      = "SK"
+  stream_enabled = false
 
   deletion_protection_enabled = var.protect_data
 

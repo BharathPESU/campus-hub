@@ -1,1 +1,76 @@
-{"Comment": "TODO see docs/pseudo_code.md section 5; replace with full ASL", "StartAt": "TODO", "States": {}}
+{
+  "Comment": "Cancel event: notify registrants, delete reminder schedule, mark cancelled",
+  "StartAt": "QueryRegistrants",
+  "States": {
+    "QueryRegistrants": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::aws-sdk:dynamodb:query",
+      "Parameters": {
+        "TableName": "${table_name}",
+        "KeyConditionExpression": "PK = :pk AND begins_with(SK, :prefix)",
+        "ExpressionAttributeValues": {
+          ":pk": { "S.$": "States.Format('EVENT#{}', $.eventId)" },
+          ":prefix": { "S": "USER#" }
+        }
+      },
+      "ResultPath": "$.registrants",
+      "Next": "NotifyEach"
+    },
+    "NotifyEach": {
+      "Type": "Map",
+      "ItemsPath": "$.registrants.Items",
+      "MaxConcurrency": 5,
+      "ItemSelector": {
+        "payload": {
+          "to.$": "$$.Map.Item.Value.email.S",
+          "subject.$": "States.Format('Cancelled: {}', $.title)",
+          "body.$": "States.Format('{} (scheduled {} UTC) has been cancelled.', $.title, $.startsAt)"
+        }
+      },
+      "ItemProcessor": {
+        "ProcessorConfig": { "Mode": "INLINE" },
+        "StartAt": "PublishCancellation",
+        "States": {
+          "PublishCancellation": {
+            "Type": "Task",
+            "Resource": "arn:aws:states:::sns:publish",
+            "Parameters": {
+              "TopicArn": "${topic_arn}",
+              "Message.$": "States.JsonToString($.payload)",
+              "MessageAttributes": { "type": { "DataType": "String", "StringValue": "cancellation" } }
+            },
+            "End": true
+          }
+        }
+      },
+      "ResultPath": null,
+      "Next": "DeleteSchedule"
+    },
+    "DeleteSchedule": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::aws-sdk:scheduler:deleteSchedule",
+      "Parameters": {
+        "Name.$": "States.Format('reminder-{}', $.eventId)",
+        "GroupName": "${schedule_group}"
+      },
+      "ResultPath": null,
+      "Catch": [ { "ErrorEquals": ["Scheduler.ResourceNotFoundException"], "ResultPath": null, "Next": "MarkCancelled" } ],
+      "Next": "MarkCancelled"
+    },
+    "MarkCancelled": {
+      "Type": "Task",
+      "Resource": "arn:aws:states:::aws-sdk:dynamodb:updateItem",
+      "Parameters": {
+        "TableName": "${table_name}",
+        "Key": {
+          "PK": { "S.$": "States.Format('EVENT#{}', $.eventId)" },
+          "SK": { "S": "META" }
+        },
+        "UpdateExpression": "SET #s = :c",
+        "ExpressionAttributeNames": { "#s": "status" },
+        "ExpressionAttributeValues": { ":c": { "S": "CANCELLED" } }
+      },
+      "End": true
+    }
+  }
+}

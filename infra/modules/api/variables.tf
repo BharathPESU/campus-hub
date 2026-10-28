@@ -1,4 +1,24 @@
-# FILE: infra/modules/api/variables.tf
-# PURPOSE: module api (variables)
-# READ FIRST: docs/pseudo_code.md section 6.2 api + route table ; docs/plan.md section 10 API Gateway
-# STATUS: TODO starter stub. Follow the docs exactly; do not invent names.
+variable "prefix" {
+  type        = string
+  description = "Resource prefix, e.g. campus-hub-dev"
+}
+
+variable "function_invoke_arns" {
+  type        = map(string)
+  description = "Map of Lambda function names to invoke ARNs"
+}
+
+variable "function_arns" {
+  type        = map(string)
+  description = "Map of Lambda function names to function ARNs"
+}
+
+variable "issuer" {
+  type        = string
+  description = "Cognito User Pool OIDC issuer URL for JWT authorizer"
+}
+
+variable "client_id" {
+  type        = string
+  description = "Cognito User Pool Client ID for JWT authorizer audience"
+}

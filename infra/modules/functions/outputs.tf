@@ -1,4 +1,14 @@
-# FILE: infra/modules/functions/outputs.tf
-# PURPOSE: module functions (outputs)
-# READ FIRST: docs/pseudo_code.md section 6.2 functions; 6.3 IAM matrix ; docs/plan.md section 10 Lambda
-# STATUS: TODO starter stub. Follow the docs exactly; do not invent names.
+output "function_arns" {
+  description = "Map of Lambda function names to ARNs"
+  value       = { for k, v in aws_lambda_function.functions : k => v.arn }
+}
+
+output "function_invoke_arns" {
+  description = "Map of Lambda function names to invoke ARNs"
+  value       = { for k, v in aws_lambda_function.functions : k => v.invoke_arn }
+}
+
+output "function_names" {
+  description = "Map of Lambda function names to actual function names"
+  value       = { for k, v in aws_lambda_function.functions : k => v.function_name }
+}

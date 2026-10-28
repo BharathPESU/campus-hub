@@ -1,4 +1,9 @@
-# FILE: infra/modules/workflows/outputs.tf
-# PURPOSE: module workflows (outputs)
-# READ FIRST: docs/pseudo_code.md section 6.2 workflows; 5 ASL ; docs/plan.md section 10 Step Functions
-# STATUS: TODO starter stub. Follow the docs exactly; do not invent names.
+output "state_machine_arn" {
+  description = "ARN of the event cancellation Step Functions state machine"
+  value       = aws_sfn_state_machine.cancel.arn
+}
+
+output "state_machine_name" {
+  description = "Name of the event cancellation Step Functions state machine"
+  value       = aws_sfn_state_machine.cancel.name
+}
