@@ -1,8 +1,24 @@
 #!/usr/bin/env bash
-# FILE: scripts/build_frontend.sh
-# PURPOSE: npm ci && npm run build
-# READ FIRST: docs/pseudo_code.md section 8.3 ; docs/plan.md section 12
-# STATUS: TODO starter stub. Follow the docs exactly; do not invent names.
+# Build frontend web application.
+# See docs/pseudo_code.md section 8.3 and docs/plan.md section 12.
+
 set -euo pipefail
+IFS=$'\n\t'
+
 ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
-# TODO implement
+# shellcheck source=scripts/lib.sh
+source "$ROOT/scripts/lib.sh"
+
+require_cmd npm
+
+log "Building frontend in $ROOT/frontend"
+cd "$ROOT/frontend"
+
+if [ -f "package-lock.json" ]; then
+  npm ci
+else
+  npm install
+fi
+
+npm run build
+log "built frontend/dist/"
